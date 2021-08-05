@@ -45,10 +45,10 @@
     </build>
 
     <distributionManagement>
-        <snapshotRepository>
+        <repository>
             <id>github</id>
-            <name>GitHub Packages</name>
+            <name>GitHub OWNER Apache Maven Packages</name>
             <url>https://maven.pkg.github.com/lizeze/kaixindou</url>
-        </snapshotRepository>
+        </repository>
     </distributionManagement>
 </project>
