@@ -4,10 +4,10 @@ package io.github.kaixindou.tool;
 public class StringUtils {
 
 
-    public static boolean isNull() {
+    public static boolean isNull(String str) {
 
 
-        return "".equals("22");
+        return str == null || str.trim().equals("");
     }
 
     public static boolean isNotNull() {
