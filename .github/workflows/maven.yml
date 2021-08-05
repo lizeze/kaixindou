@@ -1,24 +1,35 @@
-# 相当于脚本用途的一个声明
-name: Maven Central Repo Deployment
-# 触发脚本的事件  这里为发布release之后触发
-on:
-  release:
-    types: [released]
-# 定义一个发行任务
+name: build
+
+on: [push]
+
 jobs:
-  publish:
+  build:
     runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        java-version: [ 8, 11, 15 ]
+
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-java@v1
+      with:
+        java-version: 8
+    - run: mvn -B install --no-transfer-progress --file pom.xml
+
+  publish-snapshot:
+    needs: build
+    runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v2
-      - name: Set up Maven Central Repository
+
+      - name: Set up settings.xml for GitHub Packages
         uses: actions/setup-java@v1
         with:
-          java-version: 1.8
-      - name: Display settings.xml
-        run: |
-          echo "<settings><servers><server><id>ossrh</id><username>${{ secrets.OSSRH_USER }}</username><password>${{ secrets.OSSRH_PASSWORD }}</password></server></servers><profiles><profile><id>ossrh</id><activation><activeByDefault>true</activeByDefault></activation><properties><gpg.keyname>${{ secrets.GPG_SECRET }}</gpg.keyname><gpg.passphrase>'${{ secrets.GPG_PASSWORD }}'</gpg.passphrase></properties></profile></profiles></settings>" > /home/runner/.m2/settings.xml
-          cat /home/runner/.m2/settings.xml
-      - name: Build Maven Project
-        run: mvn clean install
-      - name: Publish to Apache Maven Central
-        run: mvn deploy
+          java-version: 8
+
+      - name: Publish SNAPSHOT version to GitHub Packages (we can skip tests since we only deploy if the build workflow succeeded)
+        run: mvn -B --no-transfer-progress deploy -DskipTests --projects cxf-spring-boot-starter
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
