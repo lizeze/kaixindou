@@ -10,9 +10,9 @@ public class StringUtils {
         return str == null || str.trim().equals("");
     }
 
-    public static boolean isNotNull() {
+    public static boolean isNotNull(String str) {
 
 
-        return isNull() == false;
+        return isNull(str) == false;
     }
 }
