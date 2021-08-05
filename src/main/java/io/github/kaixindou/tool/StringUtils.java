@@ -7,7 +7,7 @@ public class StringUtils {
     public static boolean isNull() {
 
 
-        return "".equals("2");
+        return "".equals("22");
     }
 
     public static boolean isNotNull() {
