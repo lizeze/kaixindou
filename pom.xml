@@ -51,4 +51,6 @@
             <url>https://maven.pkg.github.com/lizeze/kaixindou</url>
         </repository>
     </distributionManagement>
+
+
 </project>
